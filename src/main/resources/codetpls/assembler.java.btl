@@ -1,7 +1,8 @@
-package ${basePackage}.assembler
+package ${basePackage}.assembler;
 <%
     var entityType = entity + entitySuffix;
 %>
+
 import ${package.Entity}.${entityType};
 import ${basePackage}.model.dto.*;
 import ${basePackage}.model.vo.*;
@@ -19,9 +20,9 @@ import java.util.List;
  */
 @Mapper
 public interface ${entity}Assembler {
-    ${entityType} from(ProjectRoleCreateDTO addDTO);
+    ${entityType} from(${entity}AddDTO addDTO);
 
-    ${entityType} from(ProjectRoleUpdateDTO updateDTO);
+    ${entityType} from(${entity}UpdateDTO updateDTO);
 
     ${entity}DetailVO toDetailVo(${entityType} entity);
 

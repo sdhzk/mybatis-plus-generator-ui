@@ -1,5 +1,6 @@
 package ${package.Controller};
 
+import java.util.List;
 import org.springframework.web.bind.annotation.*;
 <% if(!restControllerStyle){ %>
 import org.springframework.stereotype.Controller;
@@ -65,7 +66,7 @@ public class ${table.controllerName} {
     @Operation(summary = "查询详情")
     @GetMapping(value = "/detail")
     public R<${table.entityName}DetailVO> getDetail(Long id) {
-        return R.ok(${serviceInstanceName}.getDetail(id););
+        return R.ok(${serviceInstanceName}.getDetail(id));
     }
     <% } %>
 
@@ -74,7 +75,7 @@ public class ${table.controllerName} {
     @PostMapping(value = "/add")
     public R<Void> add(@RequestBody ${table.entityName}AddDTO params) {
         ${serviceInstanceName}.add(params);
-        return R.ok();;
+        return R.ok();
     }
     <% } %>
 

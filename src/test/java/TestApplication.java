@@ -1,5 +1,6 @@
 import com.github.davidfantasy.mybatisplus.generatorui.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.MybatisPlusToolsApplication;
+import com.github.davidfantasy.mybatisplus.generatorui.dto.Constant;
 import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 
 public class TestApplication {
@@ -30,6 +31,10 @@ public class TestApplication {
                     @Override
                     public String controllerNameConvert(String entityName) {
                         return entityName + "Controller";
+                    }
+
+                    public String customFileNameConvert(String fileType, String entityName) {
+                        return entityName + fileType + Constant.DOT_JAVA;
                     }
 
                 })

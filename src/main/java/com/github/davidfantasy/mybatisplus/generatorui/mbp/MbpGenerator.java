@@ -253,6 +253,15 @@ public class MbpGenerator {
             detailVoFileBuilder.enableFileOverride();
         }
         builder.customFile(detailVoFileBuilder.build());
+
+        CustomFile.Builder assemblerFileBuilder = new CustomFile.Builder();
+        assemblerFileBuilder.fileName("Assembler");
+        assemblerFileBuilder.templatePath("classpath:codetpls/assembler.java.btl");
+        assemblerFileBuilder.packageName(PathUtil.joinPackage(generatorConfig.getBasePackage(), genSetting.getModuleName(), "assembler"));
+        if (genSetting.isOverride()) {
+            assemblerFileBuilder.enableFileOverride();
+        }
+        builder.customFile(assemblerFileBuilder.build());
     }
 
 

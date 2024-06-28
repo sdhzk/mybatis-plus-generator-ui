@@ -1,5 +1,6 @@
 package ${basePackage}.model.vo;
 
+import java.time.*;
 <% if(entitySerialVersionUID){ %>
 import java.io.Serializable;
 <% } %>
@@ -16,9 +17,6 @@ import lombok.experimental.Accessors;
 <% } %>
 <% } %>
 import com.dlhope.df.framework.common.pojo.PageParam;
-import com.dlhope.df.framework.dict.annotation.TranslateUser;
-import com.dlhope.df.framework.dict.core.databind.TranslateUserSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * <p>

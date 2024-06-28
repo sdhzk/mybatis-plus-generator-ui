@@ -2,9 +2,7 @@ package ${package.Service};
 
 import ${package.Entity}.${entity}${entitySuffix};
 import ${superServiceClassPackage};
-<% if(isNotEmpty(controllerMethods.list)){  %>
-import com.dlhope.df.framework.common.pojo.PageResult;
-<% } %>
+import java.util.List;
 <% if(isNotEmpty(controllerMethods.list)){  %>
 import com.dlhope.df.framework.common.pojo.PageResult;
 <% } %>

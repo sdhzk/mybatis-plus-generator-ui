@@ -3,12 +3,6 @@ package ${package.Entity};
 <% for(pkg in table.importPackages){ %>
 import ${pkg};
 <% } %>
-<% if(springdoc){ %>
-import io.swagger.v3.oas.annotations.media.Schema;
-<% }else if(swagger){ %>
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-<% } %>
 <% if(entityLombokModel){ %>
 import lombok.Data;
 <% if(chainModel){ %>
