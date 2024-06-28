@@ -1,12 +1,25 @@
 package ${package.ServiceImpl};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}${entitySuffix};
 import ${package.Mapper}.${table.mapperName};
 <% if(table.serviceInterface){ %>
 import ${package.Service}.${table.serviceName};
 <% } %>
 import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
+import ${basePackage}.assembler.*;
+<% if(isNotEmpty(controllerMethods.list)){  %>
+import com.dlhope.df.framework.mybatis.core.util.MyBatisUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.dlhope.df.framework.common.pojo.PageResult;
+<% } %>
+<% if(isNotEmpty(controllerMethods.hasMethod)){  %>
+import com.dlhope.cloud.common.core.exception.HopeBizException;
+import ${basePackage}.model.dto.*;
+import ${basePackage}.model.vo.*;
+<% } %>
 
 /**
  * <p>
@@ -17,12 +30,72 @@ import org.springframework.stereotype.Service;
  * @since ${date}
  */
 @Service
+@RequiredArgsConstructor
 <% if(kotlin){ %>
-open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>()<% if(table.serviceInterface){ %>, ${table.serviceName}<% } %> {
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}${entitySuffix}>()<% if(table.serviceInterface){ %>, ${table.serviceName}<% } %> {
 
 }
 <% }else{ %>
-public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}><% if(table.serviceInterface){ %> implements ${table.serviceName}<% } %> {
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}${entitySuffix}><% if(table.serviceInterface){ %> implements ${table.serviceName}<% } %> {
+    <%
+       var entityType = entity + entitySuffix;
+       var assembler = @cn.hutool.core.util.StrUtil.lowerFirst(table.entityName) + "Assembler";
+    %>
 
+    private final ${entity}Assembler ${assembler};
+
+    <% if(isNotEmpty(controllerMethods.list)){  %>
+    public PageResult<${entity}VO> getPage(${entity}QueryDTO params) {
+        LambdaQueryWrapper<${entityType}> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.orderByDesc(${entityType}::getCreateTime);
+        IPage<${entityType}> page = this.page(MyBatisUtils.buildPage(params), queryWrapper);
+        return new PageResult<>(${assembler}.toVoList(page.getRecords()), page.getTotal());
+    }
+    <% } %>
+
+    <% if(isNotEmpty(controllerMethods.getById)){ %>
+    public ${entity}DetailVO getDetail(Long id) {
+        ${entityType} entity = this.getById(id);
+        if (entity == null) {
+            throw new HopeBizException("数据没有找到");
+        }
+        return ${assembler}.toDetailVo(entity);
+    }
+    <% } %>
+
+    <% if(isNotEmpty(controllerMethods.create)){ %>
+    @Transactional(rollbackFor = Throwable.class)
+    public void add(${entity}AddDTO params) {
+        ${entityType} entity = ${assembler}.from(params);
+        boolean flag = this.save(entity);
+        if (!flag) {
+            throw new HopeBizException("新增失败");
+        }
+    }
+    <% } %>
+
+    <% if(isNotEmpty(controllerMethods.delete)){ %>
+    @Transactional(rollbackFor = Throwable.class)
+    public void delete(List<Long> ids) {
+        if (ids == null || ids.isEmpty()){
+            throw new IllegalArgumentException("参数错误");
+        }
+        boolean flag = this.removeBatchByIds(ids);
+        if (!flag) {
+            throw new HopeBizException("删除失败");
+        }
+    }
+    <% } %>
+
+    <% if(isNotEmpty(controllerMethods.update)){ %>
+    @Transactional(rollbackFor = Throwable.class)
+    public void update(${entity}UpdateDTO params) {
+        ${entityType} entity = ${assembler}.from(params);
+        boolean flag = this.updateById(entity);
+        if (!flag) {
+            throw new HopeBizException("修改失败");
+        }
+    }
+    <% } %>
 }
 <% } %>

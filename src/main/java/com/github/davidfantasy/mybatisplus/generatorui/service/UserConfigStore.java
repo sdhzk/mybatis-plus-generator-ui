@@ -165,6 +165,23 @@ public class UserConfigStore implements InitializingBean {
         entityFile.setOutputLocation(pathResolver.resolveEntityPackage());
         entityFile.setTemplateName(TemplateUtil.fileType2TemplateName(entityFile.getFileType()));
         builtInFiles.add(entityFile);
+
+        // DTO
+        // OutputFileInfo dtoFile = new OutputFileInfo();
+        // dtoFile.setBuiltIn(true);
+        // dtoFile.setFileType(FILE_TYPE_DTO);
+        // dtoFile.setOutputLocation(pathResolver.resolveDtoPackage());
+        // dtoFile.setTemplateName(TemplateUtil.fileType2TemplateName(dtoFile.getFileType()));
+        // builtInFiles.add(dtoFile);
+
+        // VO
+        // OutputFileInfo voFile = new OutputFileInfo();
+        // voFile.setBuiltIn(true);
+        // voFile.setFileType(FILE_TYPE_VO);
+        // voFile.setOutputLocation(pathResolver.resolveVoPackage());
+        // voFile.setTemplateName(TemplateUtil.fileType2TemplateName(voFile.getFileType()));
+        // builtInFiles.add(voFile);
+
         //Mapper xml
         OutputFileInfo mapperXmlFile = new OutputFileInfo();
         mapperXmlFile.setBuiltIn(true);

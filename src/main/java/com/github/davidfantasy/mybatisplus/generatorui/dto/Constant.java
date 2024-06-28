@@ -20,6 +20,10 @@ public class Constant {
 
     public final static String FILE_TYPE_ENTITY = "Entity";
 
+    public final static String FILE_TYPE_DTO = "DTO";
+
+    public final static String FILE_TYPE_VO = "VO";
+
     public final static String FILE_TYPE_MAPPER = "Mapper.java";
 
     public final static String FILE_TYPE_CONTROLLER = "Controller";

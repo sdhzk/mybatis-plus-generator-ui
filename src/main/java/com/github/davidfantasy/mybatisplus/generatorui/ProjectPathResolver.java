@@ -121,6 +121,14 @@ public class ProjectPathResolver {
         return PathUtil.joinPackage(basePackage, "entity");
     }
 
+    public String resolveDtoPackage() {
+        return PathUtil.joinPackage(basePackage, "model.dto");
+    }
+
+    public String resolveVoPackage() {
+        return PathUtil.joinPackage(basePackage, "model.vo");
+    }
+
     public String resolveControllerPackage() {
         return PathUtil.joinPackage(basePackage, "controller");
     }

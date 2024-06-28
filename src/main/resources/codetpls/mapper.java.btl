@@ -1,6 +1,6 @@
 package ${package.Mapper};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}${entitySuffix};
 import ${superMapperClassPackage};
 <% if(mapperAnnotationClass!=null){ %>
 import ${mapperAnnotationClass.name};
@@ -18,9 +18,9 @@ import ${mapperAnnotationClass.name};
 @${mapperAnnotationClass.simpleName}
 <% } %>
 <% if(kotlin){ %>
-interface ${table.mapperName} : ${superMapperClass}<${entity}>
+interface ${table.mapperName} : ${superMapperClass}<${entity}${entitySuffix}>
 <% }else{ %>
-public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}${entitySuffix}> {
 
 }
 <% } %>

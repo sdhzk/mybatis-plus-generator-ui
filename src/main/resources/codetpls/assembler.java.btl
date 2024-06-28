@@ -1,0 +1,31 @@
+package ${basePackage}.assembler
+<%
+    var entityType = entity + entitySuffix;
+%>
+import ${package.Entity}.${entityType};
+import ${basePackage}.model.dto.*;
+import ${basePackage}.model.vo.*;
+import org.mapstruct.Mapper;
+
+import java.util.List;
+
+/**
+ * <p>
+ * ${table.comment!} 转换类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Mapper
+public interface ${entity}Assembler {
+    ${entityType} from(ProjectRoleCreateDTO addDTO);
+
+    ${entityType} from(ProjectRoleUpdateDTO updateDTO);
+
+    ${entity}DetailVO toDetailVo(${entityType} entity);
+
+    ${entity}VO toVo(${entityType} entity);
+
+    List<${entity}VO> toVoList(List<${entityType}> entityList);
+}

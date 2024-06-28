@@ -9,7 +9,7 @@
 <% } %>
 <% if(baseResultMap){ %>
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="${package.Entity}.${entity}">
+    <resultMap id="BaseResultMap" type="${package.Entity}.${entity}DO">
 <% for(field in table.fields){ %>
    <% /** 生成主键排在第一位 **/ %>
    <% if(field.keyFlag){ %>

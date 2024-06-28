@@ -8,14 +8,17 @@ import org.springframework.stereotype.Controller;
 import ${superControllerClassPackage};
 <% } %>
 <% if(isNotEmpty(controllerMethods.list)){  %>
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dlhope.df.framework.common.pojo.PageResult;
 <% } %>
+import com.dlhope.cloud.common.core.utils.R;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 <% if(isNotEmpty(controllerMethods.hasMethod)){  %>
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import ${package.Service}.${table.serviceName};
-import ${package.Entity}.${table.entityName};
-import org.springframework.beans.factory.annotation.Autowired;
+import ${basePackage}.model.dto.*;
+import ${basePackage}.model.vo.*;
 <% } %>
 
 /**
@@ -26,12 +29,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author ${author}
  * @since ${date}
  */
+@Tag(name = "${table.comment!}")
 <% if(restControllerStyle){ %>
 @RestController
 <% }else{ %>
 @Controller
 <% } %>
 @RequestMapping("<% if(isNotEmpty(package.ModuleName)){ %>/${package.ModuleName}<% } %>/<% if(isNotEmpty(controllerMappingHyphenStyle)){ %>${controllerMappingHyphen}<% }else{ %>${table.entityPath}<% } %>")
+@RequiredArgsConstructor
 <% if(kotlin){ %>
 class ${table.controllerName}<% if(isNotEmpty(superControllerClass)){ %> : ${superControllerClass}()<% } %>
 <% }else{ %>
@@ -40,58 +45,54 @@ public class ${table.controllerName} extends ${superControllerClass} {
     <% }else{ %>
 public class ${table.controllerName} {
     <% } %>
-
     <%
        var serviceInstanceName = @cn.hutool.core.util.StrUtil.lowerFirst(table.serviceName);
     %>
 
     <% if(isNotEmpty(controllerMethods.hasMethod)){  %>
-    @Autowired
-    private ${table.serviceName} ${serviceInstanceName};
+    private final ${table.serviceName} ${serviceInstanceName};
     <% } %>
 
     <% if(isNotEmpty(controllerMethods.list)){  %>
-    @GetMapping(value = "/")
-    public ResponseEntity<Page<${table.entityName}>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
-        if (current == null) {
-            current = 1;
-        }
-        if (pageSize == null) {
-            pageSize = 10;
-        }
-        Page<${table.entityName}> aPage = ${serviceInstanceName}.page(new Page<>(current, pageSize));
-        return new ResponseEntity<>(aPage, HttpStatus.OK);
+    @Operation(summary = "分页查询")
+    @GetMapping(value = "/page")
+    public R<PageResult<${table.entityName}VO>> getPage(@ParameterObject ${table.entityName}QueryDTO params) {
+        return R.ok(${serviceInstanceName}.getPage(params));
     }
     <% } %>
 
     <% if(isNotEmpty(controllerMethods.getById)){ %>
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<${table.entityName}> getById(@PathVariable("id") String id) {
-        return new ResponseEntity<>(${serviceInstanceName}.getById(id), HttpStatus.OK);
+    @Operation(summary = "查询详情")
+    @GetMapping(value = "/detail")
+    public R<${table.entityName}DetailVO> getDetail(Long id) {
+        return R.ok(${serviceInstanceName}.getDetail(id););
     }
     <% } %>
 
     <% if(isNotEmpty(controllerMethods.create)){ %>
-    @PostMapping(value = "/create")
-    public ResponseEntity<Object> create(@RequestBody ${table.entityName} params) {
-        ${serviceInstanceName}.save(params);
-        return new ResponseEntity<>("created successfully", HttpStatus.OK);
+    @Operation(summary = "新增")
+    @PostMapping(value = "/add")
+    public R<Void> add(@RequestBody ${table.entityName}AddDTO params) {
+        ${serviceInstanceName}.add(params);
+        return R.ok();;
     }
     <% } %>
 
     <% if(isNotEmpty(controllerMethods.delete)){ %>
-    @PostMapping(value = "/delete/{id}")
-    public ResponseEntity<Object> delete(@PathVariable("id") String id) {
-        ${serviceInstanceName}.removeById(id);
-        return new ResponseEntity<>("deleted successfully", HttpStatus.OK);
+    @Operation(summary = "删除")
+    @PostMapping(value = "/delete")
+    public R<Void> delete(@RequestBody List<Long> ids) {
+        ${serviceInstanceName}.delete(ids);
+        return R.ok();
     }
     <% } %>
 
     <% if(isNotEmpty(controllerMethods.update)){ %>
+    @Operation(summary = "修改")
     @PostMapping(value = "/update")
-    public ResponseEntity<Object> update(@RequestBody ${table.entityName} params) {
-        ${serviceInstanceName}.updateById(params);
-        return new ResponseEntity<>("updated successfully", HttpStatus.OK);
+    public R<Void> update(@RequestBody ${table.entityName}UpdateDTO params) {
+        ${serviceInstanceName}.update(params);
+        return R.ok();
     }
     <% } %>
 }

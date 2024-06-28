@@ -1,0 +1,103 @@
+package ${basePackage}.model.dto;
+
+<% if(entitySerialVersionUID){ %>
+import java.io.Serializable;
+<% } %>
+<% if(springdoc){ %>
+import io.swagger.v3.oas.annotations.media.Schema;
+<% }else if(swagger){ %>
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+<% } %>
+<% if(entityLombokModel){ %>
+import lombok.Data;
+<% if(chainModel){ %>
+import lombok.experimental.Accessors;
+<% } %>
+<% } %>
+
+/**
+ * <p>
+ * ${table.comment!}DTO
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+<% if(entityLombokModel){ %>
+@Data
+    <% if(chainModel){ %>
+@Accessors(chain = true)
+    <% } %>
+<% } %>
+<% if(springdoc){ %>
+@Schema(name = "${entity}DTO", description = "${table.comment!''}")
+<% }else if(swagger){ %>
+@ApiModel(value = "${entity}DTO", description = "${table.comment!''}")
+<% } %>
+public class ${entity}DTO implements Serializable {
+<% if(entitySerialVersionUID){ %>
+
+    private static final long serialVersionUID = 1L;
+
+<% } %>
+<% /** -----------BEGIN 字段循环遍历----------- **/ %>
+<% for(field in table.fields){ %>
+    <% if(isNotEmpty(field.comment)){ %>
+        <% if(springdoc){ %>
+    @Schema(description = "${field.comment}")
+        <% }else if(swagger){ %>
+    @ApiModelProperty(value = "${field.comment}")
+        <% }else{ %>
+    /**
+     * ${field.comment}
+     */
+        <% } %>
+    <% } %>
+    private ${field.propertyType} ${field.propertyName};
+
+<% } %>
+<% /** -----------END 字段循环遍历----------- **/ %>
+<% if(!entityLombokModel){ %>
+    <% for(field in table.fields){ %>
+        <%
+        var getprefix ='';
+        if(field.propertyType=='boolean'){
+            getprefix='is';
+        }else{
+            getprefix='get';
+        }
+        %>
+
+    public ${field.propertyType} ${getprefix}${field.capitalName}() {
+        return ${field.propertyName};
+    }
+
+        <% if(chainModel){ %>
+    public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+        <% }else{ %>
+    public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+        <% } %>
+        this.${field.propertyName} = ${field.propertyName};
+        <% if(chainModel){ %>
+        return this;
+        <% } %>
+    }
+    <% } %>
+<% } %>
+<% if(!entityLombokModel){ %>
+
+    @Override
+    public String toString() {
+        return "${entity}{" +
+    <% for(field in table.fields){ %>
+       <% if(fieldLP.index==0){ %>
+        "${field.propertyName} = " + ${field.propertyName} +
+       <% }else{ %>
+        ", ${field.propertyName} = " + ${field.propertyName} +
+       <% } %>
+    <% } %>
+        "}";
+    }
+<% } %>
+}

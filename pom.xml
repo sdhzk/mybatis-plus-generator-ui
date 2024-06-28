@@ -34,7 +34,7 @@
     </scm>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <spring-boot.version>2.7.8</spring-boot.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
     </properties>
@@ -129,6 +129,7 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>

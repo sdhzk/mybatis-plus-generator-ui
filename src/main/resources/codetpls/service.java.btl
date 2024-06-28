@@ -1,7 +1,17 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity};
+import ${package.Entity}.${entity}${entitySuffix};
 import ${superServiceClassPackage};
+<% if(isNotEmpty(controllerMethods.list)){  %>
+import com.dlhope.df.framework.common.pojo.PageResult;
+<% } %>
+<% if(isNotEmpty(controllerMethods.list)){  %>
+import com.dlhope.df.framework.common.pojo.PageResult;
+<% } %>
+<% if(isNotEmpty(controllerMethods.hasMethod)){  %>
+import ${basePackage}.model.dto.*;
+import ${basePackage}.model.vo.*;
+<% } %>
 
 /**
  * <p>
@@ -12,9 +22,52 @@ import ${superServiceClassPackage};
  * @since ${date}
  */
 <% if(kotlin){ %>
-interface ${table.serviceName} : ${superServiceClass}<${entity}>
+interface ${table.serviceName} : ${superServiceClass}<${entity}${entitySuffix}>
 <% }else{ %>
-public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}${entitySuffix}> {
+        <% if(isNotEmpty(controllerMethods.list)){  %>
+        /**
+         * 分页查询
+         * @param params 参数
+         * @return PageResult<${entity}VO>
+         */
+        PageResult<${entity}VO> getPage(${entity}QueryDTO params);
+        <% } %>
 
+        <% if(isNotEmpty(controllerMethods.getById)){ %>
+        /**
+         * 查询详情
+         * @param id 主键id
+         * @return ${entity}DetailVO
+         */
+        ${entity}DetailVO getDetail(Long id);
+        <% } %>
+
+        <% if(isNotEmpty(controllerMethods.create)){ %>
+        /**
+         * 新增
+         * @param params 参数
+         * @return Void
+         */
+        void add(${entity}AddDTO params);
+        <% } %>
+
+        <% if(isNotEmpty(controllerMethods.delete)){ %>
+        /**
+         * 删除
+         * @param ids 主键id列表
+         * @return Void
+         */
+        void delete(List<Long> ids);
+        <% } %>
+
+        <% if(isNotEmpty(controllerMethods.update)){ %>
+        /**
+         * 修改
+         * @param params 参数
+         * @return Void
+         */
+        void update(${entity}UpdateDTO params);
+        <% } %>
 }
 <% } %>

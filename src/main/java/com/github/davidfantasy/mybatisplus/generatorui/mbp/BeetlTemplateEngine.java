@@ -1,6 +1,7 @@
 package com.github.davidfantasy.mybatisplus.generatorui.mbp;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
@@ -109,4 +110,22 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
         });
     }
 
+    /**
+     * 输出实体文件
+     *
+     * @param tableInfo 表信息
+     * @param objectMap 渲染数据
+     * @since 3.5.0
+     */
+    @Override
+    protected void outputEntity(TableInfo tableInfo, Map<String, Object> objectMap) {
+        String entityName = tableInfo.getEntityName() + (objectMap.get("entitySuffix") != null ? objectMap.get("entitySuffix").toString() : "");
+        String entityPath = getPathInfo(OutputFile.entity);
+        if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(entityPath)) {
+            getTemplateFilePath(template -> template.getEntity(getConfigBuilder().getGlobalConfig().isKotlin())).ifPresent((entity) -> {
+                String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
+                outputFile(new File(entityFile), objectMap, entity, getConfigBuilder().getStrategyConfig().entity().isFileOverride());
+            });
+        }
+    }
 }

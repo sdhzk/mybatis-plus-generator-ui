@@ -1,7 +1,7 @@
-package ${package.Entity};
+package ${basePackage}.model.vo;
 
-<% for(pkg in table.importPackages){ %>
-import ${pkg};
+<% if(entitySerialVersionUID){ %>
+import java.io.Serializable;
 <% } %>
 <% if(springdoc){ %>
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,10 +15,13 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 <% } %>
 <% } %>
+import com.dlhope.df.framework.dict.annotation.TranslateUser;
+import com.dlhope.df.framework.dict.core.databind.TranslateUserSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * <p>
- * ${table.comment!}
+ * ${table.comment!}DTO
  * </p>
  *
  * @author ${author}
@@ -30,74 +33,58 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
     <% } %>
 <% } %>
-<% if(table.convert){ %>
-@TableName("${schemaName}${table.name}")
+<% if(springdoc){ %>
+@Schema(name = "${entity}VO", description = "${table.comment!''}")
+<% }else if(swagger){ %>
+@ApiModel(value = "${entity}VO", description = "${table.comment!''}")
 <% } %>
-<% if(isNotEmpty(superEntityClass)){ %>
-public class ${entity}${entitySuffix} extends ${superEntityClass}<% if(activeRecord){ %><${entity}><%}%><% if(entitySerialVersionUID) { %> implements Serializable<% } %> {
-<% }else if(activeRecord){ %>
-public class ${entity}${entitySuffix} extends Model<${entity}> {
-<% }else if(entitySerialVersionUID){ %>
-public class ${entity}${entitySuffix} implements Serializable {
-<% }else{ %>
-public class ${entity}DO {
-<% } %>
+public class ${entity}VO implements Serializable {
 <% if(entitySerialVersionUID){ %>
 
     private static final long serialVersionUID = 1L;
 
 <% } %>
-<% var keyPropertyName; %>
 <% /** -----------BEGIN 字段循环遍历----------- **/ %>
 <% for(field in table.fields){ %>
-    <%
-    if(field.keyFlag){
-        keyPropertyName = field.propertyName;
-    }
-    %>
     <% if(isNotEmpty(field.comment)){ %>
+        <% if(springdoc){ %>
+    @Schema(description = "${field.comment}")
+        <% }else if(swagger){ %>
+    @ApiModelProperty(value = "${field.comment}")
+        <% }else{ %>
     /**
      * ${field.comment}
      */
-    <% } %>
-    <% if(field.keyFlag){ %>
-    <%
-    /*主键*/
-    %>
-        <% if(field.keyIdentityFlag){ %>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
-        <% }else if(isNotEmpty(idType)){ %>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
-        <% }else if(field.convert){ %>
-    @TableId("${field.annotationColumnName}")
-         <% } %>
-    <%
-    /*普通字段*/
-    %>
-    <% }else if(isNotEmpty(field.fill)){ %>
-        <% if(field.convert){ %>
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
-        <% }else{ %>
-    @TableField(fill = FieldFill.${field.fill})
         <% } %>
-    <% }else if(field.convert){ %>
-    @TableField("${field.annotationColumnName}")
-    <% } %>
-    <%
-    /*乐观锁注解*/
-    %>
-    <% if(field.versionField){ %>
-    @Version
-    <% } %>
-    <%
-    /*逻辑删除注解*/
-    %>
-    <% if(field.logicDeleteField){ %>
-    @TableLogic
     <% } %>
     private ${field.propertyType} ${field.propertyName};
 
 <% } %>
+<% for(field in table.commonFields){ %>
+    <%
+        if(field.propertyName == "createBy" || field.propertyName == "updateBy" || field.propertyName == "delAt") {
+            continue;
+        }
+    %>
+    <% if(isNotEmpty(field.comment)){ %>
+        <% if(springdoc){ %>
+    @Schema(description = "${field.comment}")
+        <% }else if(swagger){ %>
+    @ApiModelProperty(value = "${field.comment}")
+        <% }else{ %>
+    /**
+     * ${field.comment}
+     */
+        <% } %>
+    <% } %>
+    <% if(field.propertyName == "creator" || field.propertyName == "updater") { %>
+    @JsonSerialize(using = TranslateUserSerializer.class)
+    @TranslateUser
+    <% } %>
+    private ${field.propertyType} ${field.propertyName};
+
+<% } %>
+
 <% /** -----------END 字段循环遍历----------- **/ %>
 <% if(!entityLombokModel){ %>
     <% for(field in table.fields){ %>
@@ -125,23 +112,6 @@ public class ${entity}DO {
         <% } %>
     }
     <% } %>
-<% } %>
-<% if(entityColumnConstant){ %>
-   <% for(field in table.fields){ %>
-
-    public static final String ${strutil.toUpperCase(field.name)} = "${field.name}";
-   <% } %>
-<% } %>
-<% if(activeRecord){ %>
-
-    @Override
-    public Serializable pkVal() {
-    <% if(isNotEmpty(keyPropertyName)){ %>
-        return this.${keyPropertyName};
-    <% }else{ %>
-        return null;
-    <% } %>
-    }
 <% } %>
 <% if(!entityLombokModel){ %>
 
