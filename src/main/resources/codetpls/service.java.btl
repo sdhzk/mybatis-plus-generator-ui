@@ -45,7 +45,6 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}${en
         /**
          * 新增
          * @param params 参数
-         * @return Void
          */
         void add(${entity}AddDTO params);
         <% } %>
@@ -54,7 +53,6 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}${en
         /**
          * 删除
          * @param ids 主键id列表
-         * @return Void
          */
         void delete(List<Long> ids);
         <% } %>
@@ -63,7 +61,6 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}${en
         /**
          * 修改
          * @param params 参数
-         * @return Void
          */
         void update(${entity}UpdateDTO params);
         <% } %>
