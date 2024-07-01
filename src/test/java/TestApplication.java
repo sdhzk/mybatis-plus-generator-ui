@@ -7,7 +7,8 @@ public class TestApplication {
 
 
     public static void main(String[] args) {
-        GeneratorConfig config = GeneratorConfig.builder().jdbcUrl("jdbc:mysql://192.168.7.207:3306/test-hope-df-sale")
+        GeneratorConfig config = GeneratorConfig.builder()
+                .jdbcUrl("jdbc:mysql://192.168.7.207:3306/test-hope-df-sale")
                 .userName("root")
                 .password("")
                 .driverClassName("com.mysql.cj.jdbc.Driver")
@@ -33,6 +34,7 @@ public class TestApplication {
                         return entityName + "Controller";
                     }
 
+                    @Override
                     public String customFileNameConvert(String fileType, String entityName) {
                         return entityName + fileType + Constant.DOT_JAVA;
                     }

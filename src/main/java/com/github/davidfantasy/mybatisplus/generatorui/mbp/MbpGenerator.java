@@ -115,7 +115,7 @@ public class MbpGenerator {
         String mapperPkg = PathUtil.joinPackage(generatorConfig.getBasePackage(), moduleName, "mapper");
         String servicePkg = PathUtil.joinPackage(generatorConfig.getBasePackage(), moduleName, "service");
         String serviceImplPkg = PathUtil.joinPackage(generatorConfig.getBasePackage(), moduleName, "service.impl");
-        String controllerPkg = PathUtil.joinPackage(generatorConfig.getBasePackage(), moduleName, "controller");
+        String controllerPkg = PathUtil.joinPackage(generatorConfig.getBasePackage(), moduleName, "controller.admin");
 
         // 子包名已经包含了完整路径
         builder.parent("")
