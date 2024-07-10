@@ -64,6 +64,7 @@ public class MbpGenerator {
         userConfig.getEntityStrategy().setSuperEntityClass("com.dlhope.df.framework.mybatis.core.dataobject.BaseDO");
         userConfig.getMapperXmlStrategy().setBaseResultMap(true);
         userConfig.getControllerStrategy().setRestControllerStyle(true);
+        userConfig.getControllerStrategy().setControllerMappingHyphenStyle(false);
         FastAutoGenerator
                 .create(ds.getUrl(), ds.getUsername(), ds.getPassword())
                 .dataSourceConfig(
