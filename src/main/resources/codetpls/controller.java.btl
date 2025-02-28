@@ -21,6 +21,7 @@ import ${package.Service}.${table.serviceName};
 import ${basePackage}.model.dto.*;
 import ${basePackage}.model.vo.*;
 <% } %>
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -38,6 +39,7 @@ import ${basePackage}.model.vo.*;
 <% } %>
 @RequestMapping("<% if(isNotEmpty(package.ModuleName)){ %>/${package.ModuleName}<% } %>/<% if(isNotEmpty(controllerMappingHyphenStyle)){ %>${controllerMappingHyphen}<% }else{ %>${table.entityPath}<% } %>")
 @RequiredArgsConstructor
+@Validated
 <% if(kotlin){ %>
 class ${table.controllerName}<% if(isNotEmpty(superControllerClass)){ %> : ${superControllerClass}()<% } %>
 <% }else{ %>
@@ -65,7 +67,7 @@ public class ${table.controllerName} {
     <% if(isNotEmpty(controllerMethods.getById)){ %>
     @Operation(summary = "查询详情")
     @GetMapping(value = "/detail")
-    public R<${table.entityName}DetailVO> getDetail(Long id) {
+    public R<${table.entityName}DetailVO> getDetail(@RequestParam Long id) {
         return R.ok(${serviceInstanceName}.getDetail(id));
     }
     <% } %>
@@ -73,7 +75,7 @@ public class ${table.controllerName} {
     <% if(isNotEmpty(controllerMethods.create)){ %>
     @Operation(summary = "新增")
     @PostMapping(value = "/add")
-    public R<Void> add(@RequestBody ${table.entityName}AddDTO params) {
+    public R<Void> add(@Valid @RequestBody ${table.entityName}AddDTO params) {
         ${serviceInstanceName}.add(params);
         return R.ok();
     }
@@ -82,8 +84,8 @@ public class ${table.controllerName} {
     <% if(isNotEmpty(controllerMethods.delete)){ %>
     @Operation(summary = "删除")
     @PostMapping(value = "/delete")
-    public R<Void> delete(@RequestBody List<Long> ids) {
-        ${serviceInstanceName}.delete(ids);
+    public R<Void> delete(@RequestParam Long id) {
+        ${serviceInstanceName}.deleteById(id);
         return R.ok();
     }
     <% } %>
@@ -91,7 +93,7 @@ public class ${table.controllerName} {
     <% if(isNotEmpty(controllerMethods.update)){ %>
     @Operation(summary = "修改")
     @PostMapping(value = "/update")
-    public R<Void> update(@RequestBody ${table.entityName}UpdateDTO params) {
+    public R<Void> update(@Valid @RequestBody ${table.entityName}UpdateDTO params) {
         ${serviceInstanceName}.update(params);
         return R.ok();
     }

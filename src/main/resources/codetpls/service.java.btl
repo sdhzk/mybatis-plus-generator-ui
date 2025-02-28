@@ -51,10 +51,10 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}${en
 
         <% if(isNotEmpty(controllerMethods.delete)){ %>
         /**
-         * 删除
-         * @param ids 主键id列表
+         * 根据id删除
+         * @param id 主键id
          */
-        void delete(List<Long> ids);
+        void deleteById(Long id);
         <% } %>
 
         <% if(isNotEmpty(controllerMethods.update)){ %>

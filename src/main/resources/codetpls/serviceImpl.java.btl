@@ -23,6 +23,7 @@ import com.dlhope.cloud.common.core.exception.HopeBizException;
 import ${basePackage}.model.dto.*;
 import ${basePackage}.model.vo.*;
 <% } %>
+import java.util.Objects;
 
 /**
  * <p>
@@ -51,7 +52,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public PageResult<${entity}VO> getPage(${entity}QueryDTO params) {
         LambdaQueryWrapper<${entityType}> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.orderByDesc(${entityType}::getCreateTime);
+        queryWrapper.orderByDesc(${entityType}::getId());
         IPage<${entityType}> page = this.page(MyBatisUtils.buildPage(params), queryWrapper);
         return new PageResult<>(${assembler}.toVoList(page.getRecords()), page.getTotal());
     }
@@ -61,7 +62,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public ${entity}DetailVO getDetail(Long id) {
         ${entityType} entity = this.getById(id);
-        if (entity == null) {
+        if (Objects.isNull(entity)) {
             throw new HopeBizException("数据没有找到");
         }
         return ${assembler}.toDetailVo(entity);
@@ -83,11 +84,8 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     <% if(isNotEmpty(controllerMethods.delete)){ %>
     @Transactional(rollbackFor = Throwable.class)
     @Override
-    public void delete(List<Long> ids) {
-        if (ids == null || ids.isEmpty()){
-            throw new IllegalArgumentException("参数错误");
-        }
-        boolean flag = this.removeBatchByIds(ids);
+    public void deleteById(Long id) {
+        boolean flag = this.removeById(id);
         if (!flag) {
             throw new HopeBizException("删除失败");
         }

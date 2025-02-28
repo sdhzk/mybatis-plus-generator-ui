@@ -8,14 +8,14 @@ public class TestApplication {
 
     public static void main(String[] args) {
         GeneratorConfig config = GeneratorConfig.builder()
-                .jdbcUrl("jdbc:mysql://192.168.7.207:3306/test-hope-df-sale")
+                .jdbcUrl("jdbc:mysql://192.168.7.207:3306/test-hope-df-ems")
                 .userName("root")
-                .password("")
+                .password("xwzn@n95!")
                 .driverClassName("com.mysql.cj.jdbc.Driver")
                 // 数据库schema，MSSQL,PGSQL,ORACLE,DB2类型的数据库需要指定
                 // .schemaName("myBusiness")
                 // 数据库表前缀，生成entity名称时会去掉(v2.0.3新增)
-                .tablePrefix("se_")
+                .tablePrefix("")
                 // 如果需要修改entity及其属性的命名规则，以及自定义各类生成文件的命名规则，可自定义一个NameConverter实例，覆盖相应的名称转换方法，详细可查看该接口的说明：
                 .nameConverter(new NameConverter() {
                     /**
@@ -41,7 +41,7 @@ public class TestApplication {
 
                 })
                 // 所有生成的java文件的父包名，后续也可单独在界面上设置
-                .basePackage("com.dlhope.df.module.sale.apps")
+                .basePackage("com.dlhope.df.module.ems.apps")
                 .port(8068)
                 .build();
         MybatisPlusToolsApplication.run(config);
