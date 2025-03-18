@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * ${table.comment!}UpdateDTO
+ * ${table.comment!}修改DTO
  * </p>
  *
  * @author ${author}
@@ -32,9 +32,9 @@ import lombok.experimental.Accessors;
     <% } %>
 <% } %>
 <% if(springdoc){ %>
-@Schema(name = "${entity}UpdateDTO", description = "${table.comment!''}")
+@Schema(name = "${entity}UpdateDTO", description = "${table.comment!''}修改")
 <% }else if(swagger){ %>
-@ApiModel(value = "${entity}UpdateDTO", description = "${table.comment!''}")
+@ApiModel(value = "${entity}UpdateDTO", description = "${table.comment!''}修改")
 <% } %>
 public class ${entity}UpdateDTO implements Serializable {
 <% if(entitySerialVersionUID){ %>

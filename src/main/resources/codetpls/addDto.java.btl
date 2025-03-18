@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * ${table.comment!}AddDTO
+ * ${table.comment!}新增DTO
  * </p>
  *
  * @author ${author}
@@ -31,9 +31,9 @@ import lombok.experimental.Accessors;
     <% } %>
 <% } %>
 <% if(springdoc){ %>
-@Schema(name = "${entity}AddDTO", description = "${table.comment!''}")
+@Schema(name = "${entity}AddDTO", description = "${table.comment!''}新增")
 <% }else if(swagger){ %>
-@ApiModel(value = "${entity}AddDTO", description = "${table.comment!''}")
+@ApiModel(value = "${entity}AddDTO", description = "${table.comment!''}新增")
 <% } %>
 public class ${entity}AddDTO implements Serializable {
 <% if(entitySerialVersionUID){ %>

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * <p>
- * ${table.comment!}DTO
+ * ${table.comment!}详情DTO
  * </p>
  *
  * @author ${author}
@@ -35,9 +35,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
     <% } %>
 <% } %>
 <% if(springdoc){ %>
-@Schema(name = "${entity}DetailVO", description = "${table.comment!''}")
+@Schema(name = "${entity}DetailVO", description = "${table.comment!''}详情")
 <% }else if(swagger){ %>
-@ApiModel(value = "${entity}DetailVO", description = "${table.comment!''}")
+@ApiModel(value = "${entity}DetailVO", description = "${table.comment!''}详情")
 <% } %>
 public class ${entity}DetailVO implements Serializable {
 <% if(entitySerialVersionUID){ %>

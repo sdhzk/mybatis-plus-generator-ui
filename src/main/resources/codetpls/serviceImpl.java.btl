@@ -74,8 +74,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public void add(${entity}AddDTO params) {
         ${entityType} entity = ${assembler}.from(params);
-        boolean flag = this.save(entity);
-        if (!flag) {
+        if (!this.save(entity)) {
             throw new HopeBizException("新增失败");
         }
     }
@@ -85,8 +84,8 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public void deleteById(Long id) {
-        boolean flag = this.removeById(id);
-        if (!flag) {
+        checkExistsById(id);
+        if (!this.removeById(id)) {
             throw new HopeBizException("删除失败");
         }
     }
@@ -96,10 +95,18 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public void update(${entity}UpdateDTO params) {
-        ${entityType} entity = ${assembler}.from(params);
-        boolean flag = this.updateById(entity);
-        if (!flag) {
+        checkExistsById(params.getId());
+        if (!this.updateById(${assembler}.from(params))) {
             throw new HopeBizException("修改失败");
+        }
+    }
+
+    @Override
+    public void checkExistsById(Long id) {
+        if (!this.lambdaQuery()
+                .eq(${entityType}::getId, id)
+                .exists()) {
+            throw new HopeBizException("数据不存在");
         }
     }
     <% } %>

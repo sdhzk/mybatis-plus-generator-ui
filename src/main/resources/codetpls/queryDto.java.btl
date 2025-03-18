@@ -20,7 +20,7 @@ import com.dlhope.df.framework.common.pojo.PageParam;
 
 /**
  * <p>
- * ${table.comment!}QueryDTO
+ * ${table.comment!}查询DTO
  * </p>
  *
  * @author ${author}
@@ -33,9 +33,9 @@ import com.dlhope.df.framework.common.pojo.PageParam;
     <% } %>
 <% } %>
 <% if(springdoc){ %>
-@Schema(name = "${entity}QueryDTO", description = "${table.comment!''}")
+@Schema(name = "${entity}QueryDTO", description = "${table.comment!''}查询")
 <% }else if(swagger){ %>
-@ApiModel(value = "${entity}QueryDTO", description = "${table.comment!''}")
+@ApiModel(value = "${entity}QueryDTO", description = "${table.comment!''}查询")
 <% } %>
 public class ${entity}QueryDTO extends PageParam implements Serializable {
 <% if(entitySerialVersionUID){ %>

@@ -59,7 +59,7 @@ public class ${table.controllerName} {
     <% if(isNotEmpty(controllerMethods.list)){  %>
     @Operation(summary = "分页查询")
     @GetMapping(value = "/page")
-    public R<PageResult<${table.entityName}VO>> getPage(@ParameterObject ${table.entityName}QueryDTO params) {
+    public R<PageResult<${table.entityName}VO>> getPage(@Valid @ParameterObject ${table.entityName}QueryDTO params) {
         return R.ok(${serviceInstanceName}.getPage(params));
     }
     <% } %>

@@ -10,7 +10,11 @@ import com.baomidou.mybatisplus.generator.config.builder.*;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.fill.Column;
+import com.baomidou.mybatisplus.generator.type.ITypeConvertHandler;
+import com.baomidou.mybatisplus.generator.type.TypeRegistry;
 import com.github.davidfantasy.mybatisplus.generatorui.GeneratorConfig;
 import com.github.davidfantasy.mybatisplus.generatorui.ProjectPathResolver;
 import com.github.davidfantasy.mybatisplus.generatorui.common.ServiceException;
@@ -24,6 +28,7 @@ import com.github.davidfantasy.mybatisplus.generatorui.util.PathUtil;
 import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.type.JdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -71,6 +76,21 @@ public class MbpGenerator {
                         builder -> {
                             builder.schema(generatorConfig.getSchemaName());
                             builder.typeConvert(generatorConfig.getTypeConvert());
+                            builder.typeConvertHandler(new ITypeConvertHandler() {
+                                @Override
+                                public IColumnType convert(GlobalConfig globalConfig, TypeRegistry typeRegistry, TableField.MetaInfo metaInfo) {
+                                    if(metaInfo.getJdbcType() == JdbcType.TINYINT) {
+                                        return DbColumnType.INTEGER;
+                                    }
+                                    if(metaInfo.getJdbcType() == JdbcType.FLOAT) {
+                                        return DbColumnType.FLOAT;
+                                    }
+                                    if(metaInfo.getJdbcType() == JdbcType.DOUBLE) {
+                                        return DbColumnType.DOUBLE;
+                                    }
+                                    return typeRegistry.getColumnType(metaInfo);
+                                }
+                            });
                         }
                 ).globalConfig(builder -> {
                     builder.dateType(DateType.TIME_PACK);
@@ -82,7 +102,8 @@ public class MbpGenerator {
                     // if (userConfig.getEntityStrategy().isSwagger2()) {
                     //     builder.enableSwagger();
                     // }
-                }).templateEngine(beetlTemplateEngine)
+                })
+                .templateEngine(beetlTemplateEngine)
                 .packageConfig(builder -> {
                     configPackage(builder, genSetting.getModuleName(), userConfig);
                 }).templateConfig(builder -> {
