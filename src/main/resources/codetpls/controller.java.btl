@@ -1,6 +1,6 @@
 package ${package.Controller};
 
-import java.util.List;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 <% if(!restControllerStyle){ %>
 import org.springframework.stereotype.Controller;
