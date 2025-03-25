@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * <p>
- * ${table.comment!}详情DTO
+ * ${table.comment!}详情VO
  * </p>
  *
  * @author ${author}

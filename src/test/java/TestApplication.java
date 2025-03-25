@@ -5,7 +5,6 @@ import com.github.davidfantasy.mybatisplus.generatorui.mbp.NameConverter;
 
 public class TestApplication {
 
-
     public static void main(String[] args) {
         GeneratorConfig config = GeneratorConfig.builder()
                 .jdbcUrl("jdbc:mysql://192.168.7.207:3306/test-hope-df-ems")
