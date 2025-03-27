@@ -27,7 +27,7 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}${en
      * 分页查询
      *
      * @param params 参数
-     * @return PageResult<${entity}VO>
+     * @return ${table.comment!}分页
      */
     PageResult<${entity}VO> getPage(${entity}QueryDTO params);
     <% } %>
@@ -37,7 +37,7 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}${en
      * 查询详情
      *
      * @param id 主键id
-     * @return ${entity}DetailVO
+     * @return ${table.comment!}详情
      */
     ${entity}DetailVO getDetail(Long id);
     <% } %>
