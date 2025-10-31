@@ -28,5 +28,5 @@ public interface ${entity}Assembler {
 
     ${entity}VO toVo(${entityType} entity);
 
-    List<${entity}VO> toVoList(List<${entityType}> entityList);
+    List<${entity}VO> toVoList(List<${entityType}> list);
 }
